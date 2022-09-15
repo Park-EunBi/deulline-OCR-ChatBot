@@ -10,6 +10,8 @@ import re
 from konlpy.tag import Okt
 
 import ssl
+import random
+import pymysql
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -91,4 +93,28 @@ spacing = []
 for i in final_result:
     spacing.append(spacing_okt(i))
 
-print(spacing)
+# 샘플 데이터 저장
+num = random.randint(0, 15)
+sample_data = spacing[num:num+2]
+
+# db에 넣기 위해 한 문장으로 합치기
+product_data = ' '.join(spacing)
+sample_data = ' '.join(sample_data)
+
+conn = pymysql.connect(host='localhost', user='root', password='-', db='deulline', charset='utf8')
+
+cur = conn.cursor()
+sql = "insert into product (product_data) values(%s)"
+val = product_data
+cur.execute(sql, val)
+conn.commit()
+conn.close()
+
+conn = pymysql.connect(host='localhost', user='root', password='-', db='deulline', charset='utf8')
+
+cur = conn.cursor()
+sql = "insert into sample (sample_data) values(%s)"
+val = sample_data
+cur.execute(sql, val)
+conn.commit()
+conn.close()
