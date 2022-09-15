@@ -17,6 +17,7 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 # url으로 이미지 불러오기
 url = "https://www.elandrs.com/upload/fckeditor/tempgoodsdesc/2022061655710849539.jpg"
+product_id = 1 # 크롤링으로 id 값 넘어온다
 req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
 res = urllib.request.urlopen(req).read()
 urlopen_img = Image.open(BytesIO(res))
@@ -104,9 +105,8 @@ sample_data = ' '.join(sample_data)
 conn = pymysql.connect(host='localhost', user='root', password='-', db='deulline', charset='utf8')
 
 cur = conn.cursor()
-sql = "insert into product (product_data) values(%s)"
-val = product_data
-cur.execute(sql, val)
+sql = "update product set product_data = %s where product_id = %s;"
+cur.execute(sql, (product_data, product_id))
 conn.commit()
 conn.close()
 
