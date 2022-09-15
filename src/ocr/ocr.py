@@ -16,8 +16,8 @@ import pymysql
 ssl._create_default_https_context = ssl._create_unverified_context
 
 # url으로 이미지 불러오기
-url = "https://www.elandrs.com/upload/fckeditor/tempgoodsdesc/2022061655710849539.jpg"
-product_id = 1 # 크롤링으로 id 값 넘어온다
+url = "http://www.e-himart.co.kr/contents/content/upload/goods//00/16/90/51/68/ecd/KU75UA7050FXKR%20%EC%83%81%EC%84%B8%ED%8E%98%EC%9D%B4%EC%A7%80.jpg"
+product_id = 5 # 크롤링으로 id 값 넘어온다
 req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
 res = urllib.request.urlopen(req).read()
 urlopen_img = Image.open(BytesIO(res))
@@ -113,8 +113,7 @@ conn.close()
 conn = pymysql.connect(host='localhost', user='root', password='-', db='deulline', charset='utf8')
 
 cur = conn.cursor()
-sql = "insert into sample (sample_data) values(%s)"
-val = sample_data
-cur.execute(sql, val)
+sql = "insert into sample (sample_data, product_id) values(%s, %s)"
+cur.execute(sql, (sample_data, product_id))
 conn.commit()
 conn.close()
